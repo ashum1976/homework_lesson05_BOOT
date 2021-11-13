@@ -55,10 +55,10 @@ MACHINES = {
                             }
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|  
-    # Disable shared folders
+                # Disable shared folders
                 config.vm.synced_folder ".", "/vagrant", disabled: true  # - отключаем проброс папок с хостовой системы в гостевую для всех создаваемых машин, но можем включить 
                 # Apply VM config
-                   config.vm.define boxname do |box|
+                config.vm.define boxname do |box|
                         # Set VM base box and hostname
                                 box.vm.box = boxconfig[:box_name]
                                 box.vm.host_name = boxname.to_s
@@ -79,13 +79,13 @@ Vagrant.configure("2") do |config|
                                 if boxconfig.key?(:sync_path)
                               #      boxconfig[:sync_path].each do |path|
                               #      config.vm.synced_folder path
-                                     config.vm.synced_folder boxconfig[:sync_path], "/vagrant"
+                                     config.vm.synced_folder boxconfig[:sync_path], "~/vagrant"
                                    end              
 
                               #  end
 
                                 # VM resources config
-                    box.vm.provider "virtualbox" do |v|
+                        box.vm.provider "virtualbox" do |v|
                         # Set VM RAM size and CPU count
                                 v.memory = boxconfig[:memory]
                                 v.cpus = boxconfig[:cpus]
@@ -105,7 +105,7 @@ Vagrant.configure("2") do |config|
                                 end
                     end
                     
-                    box.vm.provision "shell", inline: <<-SHELL
+                box.vm.provision "shell", inline: <<-SHELL
                     #          mkdir -p ~root/.ssh
                     #          cp ~vagrant/.ssh/auth* ~root/.ssh
 #                                yum install -y mdadm smartmontools hdparm gdisk
